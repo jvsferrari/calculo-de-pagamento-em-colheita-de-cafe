@@ -19,14 +19,18 @@ function saveData(list) {
 }
 
 function addName(){
+    const nameField = document.getElementById("name")
+    if(!nameField){
+        return
+    }
+    let nameTyped = nameField.value
 
-    const nameTyped = nameField.value
-
-    if(nameTyped ===""){
+    if(nameTyped ===""||nameTyped === "null" || nameTyped ==="undefined"){
         nameTyped = "Nome não inserido"
     }
 
     const list = readDatabase()
+    
 
     list.push({
         names: nameTyped,
@@ -39,15 +43,24 @@ function addName(){
 }
 
 function getNumber(event, fieldId, valueInArray){
-    const field = document.getElementById(fieldId).value;
-    if (isNaN(field)||field ==""){
-        event.preventDefault();
-        alert("Digite um valor numérico!");
+    const field = document.getElementById(fieldId)
+    if (!field){
         return
     }
-    const numberTyped = parseFloat(field)
+    if (isNaN(field.value) || field.value == "" || field.value === "undefined" || field.value ==="null"){
+      event.preventDefault();
+      alert("Digite um valor numérico!");
+      return;
+    }
+    const numberTyped = parseFloat(field.value)
 
     const list = readDatabase()
+
+    if (list.length === 0) {
+    alert("Comece pela página 1!");
+    event.preventDefault();
+    return;
+    }
 
     const lastPerson = list[list.length - 1];
 
@@ -57,28 +70,31 @@ function getNumber(event, fieldId, valueInArray){
 }
 
 function finalResults(){
-    if (!tableBody){return};
-    const fullList = readDatabase();
-    const tableBody = document.getElementById("results-table");
-    const calculatedList = fullList.map(function(worker) {
-        const pricePer = worker.pricePer || 0
-        const latoes = worker.latoes || 0
-        const liters = worker.liters || 0
+  const fullList = readDatabase();
+  const tableBody = document.getElementById("results-table");
+  if (!tableBody) {
+    return;
+  }
+  const calculatedList = fullList.map(function (worker) {
+    const pricePer = worker.pricePer || 0;
+    const latoes = worker.latoes || 0;
+    const liters = worker.liters || 0;
 
-        costCalculated = pricePer/60 * (latoes * 60 + liters)
+    const costCalculated = (pricePer / 60) * (latoes * 60 + liters);
     return {
-        name: worker.name,
-        finalCost: costCalculated
+      names: worker.names,
+      finalCost: costCalculated,
     };
-});
-    calculatedList.forEach(function(item){
-        tableBody.innerHTML += `
+  });
+  tableBody.innerHTML = "";
+  calculatedList.forEach(function (item) {
+    tableBody.innerHTML += `
         <tr>
-            <td>${item.nome}</td>
+            <td>${item.names}</td>
             <td>${item.finalCost.toFixed(2)}</td>
         </tr>
         `;
-    });
+  });
 }
 
 finalResults();
