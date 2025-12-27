@@ -9,8 +9,7 @@ function type(key, field){
 }
 
 function erase(field){
-    const textNow = field.value
-    field.value = textNow.slice(0, -1)
+    field.value = field.value.slice(0, -1)
 }
 
 function readDatabase(){
