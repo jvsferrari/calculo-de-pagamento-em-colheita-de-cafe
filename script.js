@@ -41,36 +41,45 @@ function addName(){
     saveData(list)
 }
 
-function getNumber(event, field, val){
-
-    if (isNaN(field.value)){
+function getNumber(event, fieldId, valueInArray){
+    const field = document.getElementById(fieldId).value;
+    if (isNaN(field)||field ==""){
         event.preventDefault();
         alert("Digite um valor numérico!");
         return
     }
-
-    val = parseInt(field.value);
+    const numberTyped = parseFloat(field)
 
     const list = readDatabase()
 
     const lastPerson = list[list.length - 1];
 
-    lastPerson[val] = parseInt(val)
+    lastPerson[valueInArray] = numberTyped
 
     saveData(list)
 }
 
-function calculateCost(priceTyped, latoesTyped, litersTyped){
-    const pricePerTyped = parseInt(pricePerField.value);
-    latoesTyped = parseInt(latoesField.value);
-    litersTyped = parseInt(litersField.value);
-    costCalculated = priceTyped/60 * (latoesTyped * 60 + litersTyped)
+function finalResults(){
+    if (!corpoTabela){return};
+    const fullList = readDatabase();
+    const tableBody = document.getElementById("results-table");
+    const calculatedList = fullList.map(function(name) {
+        const pricePer = name.pricePer || 0
+        const latoes = name.latoes || 0
+        const liters = name.liters || 0
 
-    list.push({
-        costColumn: costCalculated
-    })
-
+        costCalculated = pricePer/60 * (latoes * 60 + liters)
+    return {
+        name: panhador.name,
+        finalCost: costCalculated
+    };
+});
+    calculatedList.forEach(function(item){
+        tableBody.innerHTML += `
+        <tr>
+            <td>${item.nome}</td>
+            <td>${item.finalCost.toFixed(2)}</td>
+        <tr>
+        `;
+    });
 }
-const finalTable = [
-    {namesColumn:"", costColumn:""}
-]
