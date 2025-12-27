@@ -1,7 +1,4 @@
 const DATABANK_NAME = "allData" 
-const nameField = document.getElementById("name");
-const latoesField = document.getElementById("latoes");
-const litersField = document.getElementById("liters");
 
 function typeNum(key, fieldId){
     const pricePerField = document.getElementById(fieldId)
@@ -18,7 +15,7 @@ function readDatabase(){
 }
 
 function saveData(list) {
-    localStorage.setItem(data, JSON.stringify(list));
+    localStorage.setItem(DATABANK_NAME, JSON.stringify(list));
 }
 
 function addName(){
@@ -60,17 +57,17 @@ function getNumber(event, fieldId, valueInArray){
 }
 
 function finalResults(){
-    if (!corpoTabela){return};
+    if (!tableBody){return};
     const fullList = readDatabase();
     const tableBody = document.getElementById("results-table");
-    const calculatedList = fullList.map(function(name) {
-        const pricePer = name.pricePer || 0
-        const latoes = name.latoes || 0
-        const liters = name.liters || 0
+    const calculatedList = fullList.map(function(worker) {
+        const pricePer = worker.pricePer || 0
+        const latoes = worker.latoes || 0
+        const liters = worker.liters || 0
 
         costCalculated = pricePer/60 * (latoes * 60 + liters)
     return {
-        name: panhador.name,
+        name: worker.name,
         finalCost: costCalculated
     };
 });
@@ -79,7 +76,9 @@ function finalResults(){
         <tr>
             <td>${item.nome}</td>
             <td>${item.finalCost.toFixed(2)}</td>
-        <tr>
+        </tr>
         `;
     });
 }
+
+finalResults();
