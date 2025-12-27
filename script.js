@@ -2,11 +2,17 @@ const DATABANK_NAME = "allData"
 
 function typeNum(key, fieldId){
     const pricePerField = document.getElementById(fieldId)
+    if(!pricePerField){
+        return
+    }
     pricePerField.value = pricePerField.value + key
 }
 
 function erase(fieldId){
     const pricePerField = document.getElementById(fieldId);
+    if (!pricePerField) {
+       return;
+    }
     pricePerField.value = pricePerField.value.slice(0, -1)
 }
 
