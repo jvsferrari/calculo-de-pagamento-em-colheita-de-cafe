@@ -1,19 +1,23 @@
 const DATABANK_NAME = "allData" 
 
 function typeNum(key, fieldId){
-    const pricePerField = document.getElementById(fieldId)
-    if(!pricePerField){
+    const field = document.getElementById(fieldId)
+    if(!field){
         return
     }
-    pricePerField.value = pricePerField.value + key
+    field.value = field.value + key
 }
 
 function erase(fieldId){
-    const pricePerField = document.getElementById(fieldId);
-    if (!pricePerField) {
+    const field = document.getElementById(fieldId);
+    if (!field) {
        return;
     }
-    pricePerField.value = pricePerField.value.slice(0, -1)
+    field.value = field.value.slice(0, -1)
+}
+
+function plus(fieldId){
+    const a = 1
 }
 
 function readDatabase(){
@@ -53,12 +57,23 @@ function getNumber(event, fieldId, valueInArray){
     if (!field){
         return
     }
-    if (isNaN(field.value) || field.value == "" || field.value === "undefined" || field.value ==="null"){
-      event.preventDefault();
-      alert("Digite um valor numérico!");
+
+    let numberTyped = field.value
+
+    if (/[^0-9+\-*/.]/.test(numberTyped)) {
+      alert("Digite apenas números e operações matemáticas!");
       return;
     }
-    const numberTyped = parseFloat(field.value)
+
+    if(numberTyped == "" || numberTyped == "undefined" || numberTyped == "null"){
+        alert("Espaço em branco!")
+        event.preventDefault();
+        return
+    }
+
+    numberTyped = math.evaluate(numberTyped);
+
+    numberTyped = parseFloat(numberTyped)
 
     const list = readDatabase()
 

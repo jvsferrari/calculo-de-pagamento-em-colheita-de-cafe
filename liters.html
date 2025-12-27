@@ -6,12 +6,19 @@
     <title>Pagamento: litros</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/1dc87a602b.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.8.1/math.js" integrity="sha512-AJmFmOXFAAzxbzp498VFGf+/Ke7n/O/Pz7L7R2in/4lEDkqhFvuIemyJo/MzXORunJkrJngeIyaWqLAj2rTY2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <h1>Calcular pagamento de panhadores</h1>
     <form>
         <label for="liters">Litros</label><br>
-        <input id="liters" type="number" placeholder="Litros"><br>
+        <div style="display: flex; justify-content: space-around; padding-top: 0;">
+        <input id="liters" type="text" placeholder="Litros">
+        <div style="display: inline-flex; flex-direction: column;">
+                <button type="button" class="calc" onclick="typeNum('+','liters')"><i class="fa-solid fa-plus"></i></button><br>
+                <button type="button" class="calc" onclick="typeNum('-','liters')"><i class="fa-solid fa-minus"></i></button>
+            </div>
+        </div>
     </form>
         <div id="keypad">
             <div class="row">

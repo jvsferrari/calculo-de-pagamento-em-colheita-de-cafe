@@ -20,25 +20,32 @@ button{
     aspect-ratio: 1 / 1;
     text-decoration: none;
     color: #F2E8CF;
-    border-radius: 0.6em;
+    border-radius: 1em;
     width: 3em;
     border: 0;
     justify-content: center;
     align-items: center;
     padding: 0;
-    font-size: clamp(20px, 7vw, 60px);
+    font-size: clamp(12px, 7vw, 60px);
     cursor: pointer;
 }
 
 input{
-    padding: 10px 20px;
-    width: 80%;
-    aspect-ratio: 16/5;
+    padding: 1em 1em;
+    width: 60%;
     font-size: 6vw;
     color: #BC4749;
     background-color: #F2E8CF;
     border: 0;
-    border-radius: 0.8em;
+    border-radius: 1em;
+}
+
+.calc{
+    width: 2.5em;
+}
+
+form{
+    padding: 0;
 }
 
 .keypad,
@@ -63,6 +70,7 @@ h2{
     font-weight: 1000;
     font-size: 7vw;
     display: block;
+    margin: 1em
 }
 
 h2{
