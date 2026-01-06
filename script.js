@@ -97,25 +97,32 @@ function finalResults() {
   if (!tableBody) {
     return;
   }
+
+  tableBody.textContent = '';
+
   const calculatedList = fullList.map(function (worker) {
     const pricePer = worker.pricePer || 0;
     const latoes = worker.latoes || 0;
     const liters = worker.liters || 0;
-
     const costCalculated = (pricePer / 60) * (latoes * 60 + liters);
     return {
       names: worker.names,
       finalCost: costCalculated,
     };
   });
-  tableBody.innerHTML = '';
+
   calculatedList.forEach(function (item) {
-    tableBody.innerHTML += `
-        <tr>
-            <td>${item.names}</td>
-            <td>${item.finalCost.toFixed(2)}</td>
-        </tr>
-        `;
+    const tr = document.createElement('tr');
+
+    const tdName = document.createElement('td');
+    tdName.innerText = item.names;
+
+    const tdCost = document.createElement('td');
+    tdCost.innerText = item.finalCost.toFixed(2);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdCost);
+    tableBody.appendChild(tr);
   });
 }
 
