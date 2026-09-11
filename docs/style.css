@@ -6,14 +6,6 @@
 	text-align: center;
 }
 
-.visor {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 10px;
-	width: 100%;
-}
-
 html {
 	background-color: #a7c957;
 }
@@ -26,6 +18,14 @@ body {
 	flex-direction: column;
 }
 
+.visor {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+}
+
 #nomes {
 	height: 100%;
 	width: 100%;
@@ -35,6 +35,7 @@ body {
 	align-items: center;
 }
 
+/* --- Botões e Ícones (Mobile Fluido) --- */
 a,
 button {
 	background-color: #386641;
@@ -42,34 +43,35 @@ button {
 	text-decoration: none;
 	color: #f2e8cf;
 	border-radius: 40%;
-	height: 22dvw;
-	width: 22dvw;
+	width: 22vw;
+	aspect-ratio: 1; /* Força o botão a ser geometricamente perfeito */
 	border: 0;
 	justify-content: center;
 	align-items: center;
 	padding: 0;
-	font-size: clamp(12px, 20vw, 100px);
+	font-size: 8vw;
 	cursor: pointer;
+	appearance: none; /* Bloqueia o preenchimento nativo do Chrome Mobile */
 }
 
+/* --- Mostradores de Valor --- */
 #campos div,
 #anterior div {
-	font-size: 4.5%;
 	color: #bc4749;
 	background-color: #f2e8cf;
-	height: 18dvh;
+	width: 38vw;
+	aspect-ratio: 1;
 	border: 0;
 	border-radius: 30%;
-	width: 18dvh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	font-size: 12vw;
 }
 
 #anterior div {
-	height: 12dvh;
-	width: 12dvh;
-	font-size: 15vw;
+	width: 25vw;
+	font-size: 8vw;
 	opacity: 0.6;
 }
 
@@ -102,6 +104,7 @@ form {
 	align-items: center;
 }
 
+/* --- Tipografia Mobile --- */
 .pagina h1 {
 	color: #f2e8cf;
 	background-color: #6a994e;
@@ -126,21 +129,22 @@ p {
 	width: fit-content;
 	color: #386641;
 	font-weight: 1000;
-	font-size: 7vw;
+	font-size: 6vw;
 }
 
 .confirm {
 	display: flex;
 	justify-content: space-around;
-	margin: 8vw;
+	margin: 8vw 0;
 }
 
+/* --- Tabelas --- */
 table {
-	width: 80%;
+	width: 90%;
 	background-color: #f2e8cf;
 	padding: 0px;
 	text-align: center;
-	margin: 0;
+	margin: 0 auto;
 	border-radius: 30px;
 	border-spacing: 0px;
 	border: #386641 0px solid;
@@ -150,13 +154,11 @@ th,
 td {
 	padding: 3vw;
 	color: #386641;
-	font-size: 7vw;
+	font-size: 6vw;
 	text-align: center;
 	border-color: #6a994e;
 	border: #6a994e solid;
 	border-width: 5px 0px 0px 0px;
-	border-spacing: 0px;
-	border-radius: 0px;
 }
 
 th {
@@ -190,8 +192,8 @@ body > div {
 	flex-direction: column;
 	align-items: center;
 	margin: 0;
-	gap: 20px;
-	width: 24dvw;
+	gap: 15px;
+	width: auto;
 }
 
 #calculadora,
@@ -206,8 +208,9 @@ body > div {
 	width: 100%;
 }
 
+/* --- Input Principal (Nome) --- */
 #campoNome {
-	padding: 10px 10px;
+	padding: 10px;
 	width: 80%;
 	font-size: 10vw;
 	color: #bc4749;
@@ -226,13 +229,12 @@ div:has(h1),
 }
 
 #resultados .botaoComposto button {
-	font-size: 7vw;
+	font-size: 6vw;
 	width: 20vw;
-	height: 20vw;
 }
 
 #resultados .botaoComposto p {
-	font-size: 6vw;
+	font-size: 5vw;
 }
 
 table.escondido .quantidadeCafe {
@@ -243,6 +245,7 @@ table.escondido .quantidadeCafe {
 	display: none;
 }
 
+/* --- Botões do Teclado --- */
 .desfazer {
 	display: flex;
 	flex-direction: column;
@@ -252,10 +255,10 @@ table.escondido .quantidadeCafe {
 }
 
 .desfazer button {
-	height: 100%;
-	width: 20dvw;
+	width: 20vw;
+	height: auto;
 	border-radius: 15px;
-	font-size: 30px;
+	font-size: 8vw;
 }
 
 #confirmar {
@@ -269,7 +272,7 @@ table.escondido .quantidadeCafe {
 }
 
 .campo {
-	overflow: scroll;
+	overflow: hidden; /* Evita que o Android crie barra de rolagem cortando as bordas redondas */
 }
 
 #teclado {
@@ -283,6 +286,7 @@ table.escondido .quantidadeCafe {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
+	width: 100%;
 }
 
 #calculadora {

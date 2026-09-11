@@ -23,12 +23,15 @@ const paginas = document.querySelectorAll('.pagina');
 const tabelaToda = document.querySelector('#tabelaToda');
 const mudarPreco = document.querySelector('#mudarPreco');
 const voltar = document.querySelectorAll('.voltar');
-const etapa = document.querySelectorAll('#etapa');
+const etapa = document.querySelector('#etapa');
+const campoInteiroAnt = document.querySelector('#campoInteiroAnt');
+const campoDecimalAnt = document.querySelector('#campoDecimalAnt');
 
 let numPanhador = 0;
 let passo = 1;
 let panhadores = [];
 let precoDefinido = false;
+let numCount = 0;
 // preco novo??????????????????????????????? checkbox
 function novoPanhador() {
 	let nome = campoNome.innerText;
@@ -63,7 +66,12 @@ pular.addEventListener('click', () => {
 });
 
 borracha.addEventListener('click', () => {
-	campoInteiro.innerText = campoInteiro.innerText.slice(0, -1);
+	if (numCount <= 2) {
+		campoInteiro.innerText = campoInteiro.innerText.slice(0, -1);
+	} else {
+		campoDecimal.innerText = campoDecimal.innerText.slice(0, -1);
+	}
+	numCount--;
 });
 
 finalizar.addEventListener('click', () => {
@@ -114,6 +122,7 @@ numeroPronto.addEventListener('click', () => {
 			}
 			mudarPreco.style.display = 'flex';
 			campoInteiro.innerText = '';
+			campoDecimal.innerText = '';
 			break;
 		case 3:
 			try {
@@ -125,10 +134,10 @@ numeroPronto.addEventListener('click', () => {
 				return;
 			}
 			campoInteiro.innerText = '';
-			break;
-		case 4:
+			campoDecimal.innerText = '';
+
 			try {
-				let expressao = campoInteiro.innerText.trim();
+				let expressao = campoDecimal.innerText.trim();
 				panhadores[numPanhador].litros =
 					expressao === '' ? 0 : math.evaluate(expressao);
 				precoDefinido = true;
@@ -137,6 +146,7 @@ numeroPronto.addEventListener('click', () => {
 				return;
 			}
 			campoInteiro.innerText = '';
+			campoDecimal.innerText = '';
 			calcularResultados();
 			break;
 	}
@@ -145,7 +155,16 @@ numeroPronto.addEventListener('click', () => {
 
 numeros.forEach((tecla) => {
 	tecla.addEventListener('click', () => {
-		campoInteiro.innerText += tecla.innerText;
+		if (numCount >= 2) {
+			campoDecimal.innerText += tecla.innerText;
+			numCount++;
+		} else {
+			campoInteiro.innerText += tecla.innerText;
+			numCount++;
+			if (numCount >= 2) {
+				campoDecimal.focus();
+			}
+		}
 	});
 });
 
@@ -178,6 +197,7 @@ zerar.addEventListener('click', () => {
 });
 
 function proximaPagina() {
+	numCount = 0;
 	switch (passo) {
 		case 0:
 			nomes.style.display = 'flex';
@@ -192,8 +212,7 @@ function proximaPagina() {
 				proximaPagina();
 			} else {
 				nomeAtual.innerText = panhadores[numPanhador].nome;
-				//campoInteiro.placeholder = 'R$';
-				//anterior.innerText = panhadores[numPanhador].nome;
+				campoInteiro.placeholder = 'R$';
 				nomes.style.display = 'none';
 				calculadora.style.display = 'flex';
 				passo = 2;
@@ -201,25 +220,34 @@ function proximaPagina() {
 			}
 			break;
 		case 2:
-			//campoInteiro.placeholder = 'Latões';
-			//anterior.innerText = `${panhadores[numPanhador].preco} R$/latão`;
+			etapa.innerText = 'Quantidade colhida';
+			if (numPanhador > 0) {
+				campoInteiroAnt.innerText = Math.trunc(
+					panhadores[numPanhador - 1].preco,
+				);
+				campoDecimalAnt.innerText =
+					panhadores[numPanhador - 1].preco % 1;
+			} else {
+				campoInteiroAnt.innerText = '-';
+				campoDecimalAnt.innerText = '-';
+			}
 			nomes.style.display = 'none';
 			calculadora.style.display = 'flex';
 			passo = 3;
-			window.history.pushState({ passo: passo }, '', '#' + 'latoes');
+			window.history.pushState({ passo: passo }, '', '#' + 'cafe');
 			break;
-		case 3:
+		/*case 3:
 			confirmar.style.display = 'none';
 			calculadora.style.display = 'flex';
-			//campoInteiro.placeholder = 'Litros';
-			//anterior.innerText = `${panhadores[numPanhador].latoes} latões`;
+			etapa.innerText = 'Litros';
+			//anterior.innerText = `${panhadores[numPanhador].latoes}`;
 			passo = 4;
 			window.history.pushState({ passo: passo }, '', '#' + 'litros');
-			break;
-		case 4:
+			break;*/
+		case 3:
 			calculadora.style.display = 'none';
 			confirmar.style.display = 'flex';
-			passo = 5;
+			passo = 4;
 			window.history.pushState({ passo: passo }, '', '#' + 'confirmar');
 			break;
 	}

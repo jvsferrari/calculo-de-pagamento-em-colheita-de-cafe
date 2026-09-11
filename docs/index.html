@@ -21,15 +21,19 @@
 			<div id="campoNome" placeholder="Nome" contenteditable="true"></div>
 			<div class="botoes">
 				<div class="botaoComposto">
-					<a id="pular"><i class="fa-solid fa-forward"></i></a>
+					<button id="pular">
+						<i class="fa-solid fa-forward"></i>
+					</button>
 					<p>Pular</p>
 				</div>
 				<div class="botaoComposto">
-					<a id="nomePronto"><i class="fa-solid fa-check"></i></a>
+					<button id="nomePronto">
+						<i class="fa-solid fa-check"></i>
+					</button>
 					<p>Pronto</p>
 				</div>
 				<div class="botaoComposto" id="mudarPreco">
-					<a><i class="fa-solid fa-dollar-sign"></i></a>
+					<button><i class="fa-solid fa-dollar-sign"></i></button>
 					<p>Preço diferente</p>
 				</div>
 			</div>
@@ -44,28 +48,24 @@
 						id="campoInteiroAnt"
 						class="campo"
 						placeholder="R$"
-						contenteditable="false"
-					></div>
+						contenteditable="false"></div>
 					<div
 						id="campoDecimalAnt"
 						class="campo"
 						placeholder=""
-						contenteditable="false"
-					></div>
+						contenteditable="false"></div>
 				</div>
 				<div id="campos">
 					<div
 						id="campoInteiro"
 						class="campo"
 						placeholder="R$"
-						contenteditable="true"
-					></div>
+						contenteditable="true"></div>
 					<div
 						id="campoDecimal"
 						class="campo"
 						placeholder=""
-						contenteditable="true"
-					></div>
+						contenteditable="true"></div>
 				</div>
 			</div>
 			<div id="teclado">
@@ -86,7 +86,7 @@
 						<button class="numero">3</button>
 					</div>
 					<div class="linha">
-						<a id="mais" class="numero">+</a>
+						<button id="mais" class="numero">+</button>
 						<button class="numero">0</button>
 						<button id="numeroPronto">
 							<i class="fa-solid fa-check"></i>
