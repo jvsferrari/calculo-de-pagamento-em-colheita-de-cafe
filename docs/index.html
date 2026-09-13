@@ -40,7 +40,6 @@
 		</div>
 
 		<div class="pagina" id="calculadora">
-			<h2 id="nomeAtual"></h2>
 			<h2 id="etapa">Preço</h2>
 			<div class="visor">
 				<div id="anterior">
@@ -55,17 +54,19 @@
 						placeholder=""
 						contenteditable="false"></div>
 				</div>
-				<div id="campos">
+				<div id="atual">
 					<div
 						id="campoInteiro"
 						class="campo"
 						placeholder="R$"
-						contenteditable="true"></div>
+						contenteditable="true"
+						tabindex="0"></div>
 					<div
 						id="campoDecimal"
 						class="campo"
 						placeholder=""
-						contenteditable="true"></div>
+						contenteditable="true"
+						tabindex="0"></div>
 				</div>
 			</div>
 			<div id="teclado">
@@ -103,6 +104,7 @@
 					</button>
 				</div>
 			</div>
+			<h2 id="nomeAtual"></h2>
 		</div>
 		<div class="pagina" id="resultados">
 			<h1>Total</h1>

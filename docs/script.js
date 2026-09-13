@@ -155,16 +155,7 @@ numeroPronto.addEventListener('click', () => {
 
 numeros.forEach((tecla) => {
 	tecla.addEventListener('click', () => {
-		if (numCount >= 2) {
-			campoDecimal.innerText += tecla.innerText;
-			numCount++;
-		} else {
-			campoInteiro.innerText += tecla.innerText;
-			numCount++;
-			if (numCount >= 2) {
-				campoDecimal.focus();
-			}
-		}
+		teclar(tecla);
 	});
 });
 
@@ -195,6 +186,19 @@ zerar.addEventListener('click', () => {
 	resultados.style.display = 'none';
 	window.history.pushState({ passo: passo }, '', '#' + 'nomes');
 });
+
+function teclar(tecla) {
+	if (numCount < 2) {
+		campoInteiro.innerText += tecla.innerText;
+		numCount++;
+	} else {
+		if (numCount < 4) {
+			campoDecimal.focus();
+			campoDecimal.innerText += tecla.innerText;
+			numCount++;
+		} else return;
+	}
+}
 
 function proximaPagina() {
 	numCount = 0;

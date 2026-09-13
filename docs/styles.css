@@ -48,19 +48,19 @@ button {
 	justify-content: center;
 	align-items: center;
 	padding: 0;
-	font-size: clamp(12px, 20vw, 100px);
+	font-size: clamp(1rem, 20dvw, 3rem);
 	cursor: pointer;
 }
 
-#campos div,
+#atual div,
 #anterior div {
-	font-size: 4.5%;
+	font-size: clamp(1rem, 60dvw, 6rem);
 	color: #bc4749;
 	background-color: #f2e8cf;
-	height: 18dvh;
+	aspect-ratio: 1;
 	border: 0;
 	border-radius: 30%;
-	width: 18dvh;
+	width: 35dvw;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -113,12 +113,23 @@ form {
 	width: 100%;
 }
 
-label,
 h2 {
-	color: #386641;
+	color: #bc4749;
 	font-weight: 1000;
-	font-size: 8vw;
+	font-size: 8dvw;
+	padding: 10px;
+	border-radius: 0.5em;
 	display: inline-flex;
+	background-color: #f2e8cf;
+}
+
+#nomeAtual {
+	color: #f2e8cf;
+	background-color: #9c6644;
+	border-radius: 0.5em 0.5em 0 0;
+	position: fixed;
+	bottom: -10px;
+	font-size: 1.5rem;
 }
 
 p {
@@ -262,14 +273,14 @@ table.escondido .quantidadeCafe {
 	align-items: center;
 }
 
-#campos {
+#atual {
 	display: flex;
 	justify-content: space-around;
 	width: 100%;
 }
 
 .campo {
-	overflow: scroll;
+	overflow: hidden;
 }
 
 #teclado {
@@ -286,12 +297,7 @@ table.escondido .quantidadeCafe {
 }
 
 #calculadora {
-	justify-content: space-between;
+	justify-content: space-around;
 	gap: 10px;
 	align-items: center;
-}
-
-#nomeAtual {
-	color: #bc4749;
-	font-weight: 1000;
 }
