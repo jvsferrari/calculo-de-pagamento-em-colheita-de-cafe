@@ -12,13 +12,18 @@
 		<script src="script.js" defer></script>
 	</head>
 	<body>
+		<h3 id="debug"></h3>
 		<div class="pagina" id="nomes">
 			<h1>Calcular pagamento</h1>
 			<h2>
 				Nome <br />
 				do panhador
 			</h2>
-			<div id="campoNome" placeholder="Nome" contenteditable="true"></div>
+			<div
+				id="campoNome"
+				placeholder="Nome"
+				contenteditable="true"
+				class="campo"></div>
 			<div class="botoes">
 				<div class="botaoComposto">
 					<button id="pular">
@@ -42,27 +47,27 @@
 		<div class="pagina" id="calculadora">
 			<h2 id="etapa">Preço</h2>
 			<div class="visor">
-				<div id="anterior">
+				<div id="camposAnteriores">
 					<div
-						id="campoInteiroAnt"
+						id="campoLatoesAnt"
 						class="campo"
 						placeholder="R$"
 						contenteditable="false"></div>
 					<div
-						id="campoDecimalAnt"
+						id="campoLitrosAnt"
 						class="campo"
 						placeholder=""
 						contenteditable="false"></div>
 				</div>
-				<div id="atual">
+				<div id="camposAtuais">
 					<div
-						id="campoInteiro"
+						id="campoLatoes"
 						class="campo"
 						placeholder="R$"
 						contenteditable="true"
 						tabindex="0"></div>
 					<div
-						id="campoDecimal"
+						id="campoLitros"
 						class="campo"
 						placeholder=""
 						contenteditable="true"
@@ -87,7 +92,7 @@
 						<button class="numero">3</button>
 					</div>
 					<div class="linha">
-						<button id="mais" class="numero">+</button>
+						<button id="mais">+</button>
 						<button class="numero">0</button>
 						<button id="numeroPronto">
 							<i class="fa-solid fa-check"></i>

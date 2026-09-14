@@ -52,8 +52,8 @@ button {
 	cursor: pointer;
 }
 
-#atual div,
-#anterior div {
+#camposAtuais div,
+#camposAnteriores div {
 	font-size: clamp(1rem, 60dvw, 6rem);
 	color: #bc4749;
 	background-color: #f2e8cf;
@@ -66,14 +66,14 @@ button {
 	justify-content: center;
 }
 
-#anterior div {
+#camposAnteriores div {
 	height: 12dvh;
 	width: 12dvh;
 	font-size: 15vw;
 	opacity: 0.6;
 }
 
-#anterior {
+#camposAnteriores {
 	width: 100%;
 	display: none;
 	align-items: center;
@@ -113,7 +113,8 @@ form {
 	width: 100%;
 }
 
-h2 {
+h2,
+h3 {
 	color: #bc4749;
 	font-weight: 1000;
 	font-size: 8dvw;
@@ -121,6 +122,13 @@ h2 {
 	border-radius: 0.5em;
 	display: inline-flex;
 	background-color: #f2e8cf;
+}
+
+#debug {
+	position: fixed;
+	top: -10px;
+	left: -10px;
+	z-index: 999;
 }
 
 #nomeAtual {
@@ -273,7 +281,7 @@ table.escondido .quantidadeCafe {
 	align-items: center;
 }
 
-#atual {
+#camposAtuais {
 	display: flex;
 	justify-content: space-around;
 	width: 100%;

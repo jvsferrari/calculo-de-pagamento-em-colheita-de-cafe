@@ -4,11 +4,11 @@ const calculadora = document.querySelector('#calculadora');
 const resultados = document.querySelector('#resultados');
 const numeros = document.querySelectorAll('.numero');
 const campoNome = document.querySelector('#campoNome');
-const campoInteiro = document.querySelector('#campoInteiro');
-const campoDecimal = document.querySelector('#campoDecimal');
+const campoLatoes = document.querySelector('#campoLatoes');
+const campoLitros = document.querySelector('#campoLitros');
 const nomePronto = document.querySelector('#nomePronto');
 const numeroPronto = document.querySelector('#numeroPronto');
-const anterior = document.querySelector('#anterior');
+const camposAnteriores = document.querySelector('#camposAnteriores');
 const nomeAtual = document.querySelector('#nomeAtual');
 const confirmar = document.querySelector('#confirmar');
 const finalizar = document.querySelector('#finalizar');
@@ -18,14 +18,18 @@ const compartilhar = document.querySelector('#compartilhar');
 const reiniciar = document.querySelector('#reiniciar');
 const zerar = document.querySelector('#zerar');
 const borracha = document.querySelector('#borracha');
+const mais = document.querySelector('#mais');
 const pular = document.querySelector('#pular');
 const paginas = document.querySelectorAll('.pagina');
 const tabelaToda = document.querySelector('#tabelaToda');
 const mudarPreco = document.querySelector('#mudarPreco');
 const voltar = document.querySelectorAll('.voltar');
 const etapa = document.querySelector('#etapa');
-const campoInteiroAnt = document.querySelector('#campoInteiroAnt');
-const campoDecimalAnt = document.querySelector('#campoDecimalAnt');
+const campoLatoesAnt = document.querySelector('#campoLatoesAnt');
+const campoLitrosAnt = document.querySelector('#campoLitrosAnt');
+const campos = document.querySelectorAll('.campo');
+
+const debug = document.querySelector('#debug');
 
 let numPanhador = 0;
 let passo = 1;
@@ -48,50 +52,64 @@ function novoPanhador() {
 	};
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+	mostrarPasso();
+});
+
 nomePronto.addEventListener('click', () => {
-	if (!panhadores[numPanhador]) {
-		panhadores[numPanhador] = novoPanhador();
-	} else {
-		let nome = campoNome.innerText.trim();
-		panhadores[numPanhador].nome = nome === '' ? 'Nome não definido' : nome;
-	}
-	proximaPagina();
+	salvarNome();
+	passo++;
+	exibirPagina(passo);
 });
 
 pular.addEventListener('click', () => {
 	if (!panhadores[numPanhador]) {
 		panhadores[numPanhador] = novoPanhador();
 	}
-	proximaPagina();
+	passo++;
+	exibirPagina(passo);
 });
 
 borracha.addEventListener('click', () => {
 	if (numCount <= 2) {
-		campoInteiro.innerText = campoInteiro.innerText.slice(0, -1);
+		campoLatoes.innerText = campoLatoes.innerText.slice(0, -1);
 	} else {
-		campoDecimal.innerText = campoDecimal.innerText.slice(0, -1);
+		campoLitros.innerText = campoLitros.innerText.slice(0, -1);
 	}
 	numCount--;
 });
 
+mais.addEventListener('click', () => {
+	if (passo == 2) {
+		return;
+	}
+	somar();
+});
+
+function somar() {
+	camposAnteriores.style.display = 'flex';
+	panhadores[numPanhador].latoes += parseInt(campoLatoes.innerText) || 0;
+	panhadores[numPanhador].litros += parseInt(campoLitros.innerText) || 0;
+	campoLatoesAnt.innerText = campoLatoes.innerText || '00';
+	campoLitrosAnt.innerText = campoLitros.innerText || '00';
+	campoLatoes.innerText = '';
+	campoLitros.innerText = '';
+	numCount = 0;
+}
+
 finalizar.addEventListener('click', () => {
-	confirmar.style.display = 'none';
-	resultados.style.display = 'flex';
-	passo = 6;
 	window.history.pushState({ passo: passo }, '', '#' + 'resultados');
 	calcularResultados();
 	mostrarResultados();
 	precoDefinido = false;
-	mudarPreco.style.display = 'none';
+	passo = 6;
+	exibirPagina(passo);
 });
 
 adicionar.addEventListener('click', () => {
-	campoNome.innerText = '';
-
 	numPanhador++;
 	passo = 1;
-	nomes.style.display = 'flex';
-	confirmar.style.display = 'none';
+	exibirPagina(passo);
 	window.history.pushState({ passo: passo }, '', '#' + 'nomes');
 });
 
@@ -100,7 +118,8 @@ mudarPreco.addEventListener('click', () => {
 		panhadores[numPanhador] = novoPanhador();
 	}
 	precoDefinido = false;
-	proximaPagina();
+	passo++;
+	exibirPagina(passo);
 });
 
 voltar.forEach((botao) => {
@@ -109,48 +128,35 @@ voltar.forEach((botao) => {
 	});
 });
 
+function salvarNome() {
+	if (!panhadores[numPanhador]) {
+		panhadores[numPanhador] = novoPanhador();
+	} else {
+		let nome = campoNome.innerText.trim();
+		panhadores[numPanhador].nome = nome === '' ? 'Nome não definido' : nome;
+	}
+	nomeAtual.innerText = panhadores[numPanhador].nome;
+}
+
+function salvarPreco() {
+	let reais = parseFloat(campoLatoes.innerText) || 0;
+	let centavos = parseFloat(campoLitros.innerText) || 0;
+	panhadores[numPanhador].preco = reais + centavos / 100;
+	precoDefinido = true;
+}
+
 numeroPronto.addEventListener('click', () => {
 	switch (passo) {
-		case 2:
-			try {
-				let expressao = campoInteiro.innerText.trim();
-				panhadores[numPanhador].preco =
-					expressao === '' ? 0 : math.evaluate(expressao);
-			} catch (erro) {
-				alert('Expressão matemática inválida! Corrija os valores.');
-				return;
-			}
-			mudarPreco.style.display = 'flex';
-			campoInteiro.innerText = '';
-			campoDecimal.innerText = '';
+		case 2: ///2 -> 3
+			salvarPreco();
+			passo++;
 			break;
-		case 3:
-			try {
-				let expressao = campoInteiro.innerText.trim();
-				panhadores[numPanhador].latoes =
-					expressao === '' ? 0 : math.evaluate(expressao);
-			} catch (erro) {
-				alert('Expressão matemática inválida! Corrija os valores.');
-				return;
-			}
-			campoInteiro.innerText = '';
-			campoDecimal.innerText = '';
-
-			try {
-				let expressao = campoDecimal.innerText.trim();
-				panhadores[numPanhador].litros =
-					expressao === '' ? 0 : math.evaluate(expressao);
-				precoDefinido = true;
-			} catch (erro) {
-				alert('Expressão matemática inválida! Corrija os valores.');
-				return;
-			}
-			campoInteiro.innerText = '';
-			campoDecimal.innerText = '';
-			calcularResultados();
+		case 3: //3 -> 4
+			somar();
+			passo++;
 			break;
 	}
-	proximaPagina();
+	exibirPagina(passo);
 });
 
 numeros.forEach((tecla) => {
@@ -168,13 +174,11 @@ baixar.addEventListener('click', () => {
 });
 
 reiniciar.addEventListener('click', () => {
-	campoNome.innerText = '';
+	limparCampos();
 	numPanhador++;
 	passo = 1;
-	nomes.style.display = 'flex';
-	resultados.style.display = 'none';
+	exibirPagina(1);
 	tabela.replaceChildren();
-	window.history.pushState({ passo: passo }, '', '#' + 'nomes');
 });
 
 zerar.addEventListener('click', () => {
@@ -182,79 +186,25 @@ zerar.addEventListener('click', () => {
 	panhadores = [];
 	tabela.replaceChildren();
 	passo = 1;
-	nomes.style.display = 'flex';
-	resultados.style.display = 'none';
-	window.history.pushState({ passo: passo }, '', '#' + 'nomes');
+	exibirPagina(1);
 });
 
-function teclar(tecla) {
+function teclar(numero) {
 	if (numCount < 2) {
-		campoInteiro.innerText += tecla.innerText;
+		campoLatoes.innerText += numero.innerText;
 		numCount++;
 	} else {
 		if (numCount < 4) {
-			campoDecimal.focus();
-			campoDecimal.innerText += tecla.innerText;
+			campoLitros.focus();
+			campoLitros.innerText += numero.innerText;
 			numCount++;
 		} else return;
 	}
 }
 
-function proximaPagina() {
-	numCount = 0;
-	switch (passo) {
-		case 0:
-			nomes.style.display = 'flex';
-			calculadora.style.display = 'none';
-			passo = 1;
-			break;
-		case 1:
-			if (precoDefinido && numPanhador > 0) {
-				passo = 2;
-				panhadores[numPanhador].preco =
-					panhadores[numPanhador - 1].preco;
-				proximaPagina();
-			} else {
-				nomeAtual.innerText = panhadores[numPanhador].nome;
-				campoInteiro.placeholder = 'R$';
-				nomes.style.display = 'none';
-				calculadora.style.display = 'flex';
-				passo = 2;
-				window.history.pushState({ passo: passo }, '', '#' + 'preco');
-			}
-			break;
-		case 2:
-			etapa.innerText = 'Quantidade colhida';
-			if (numPanhador > 0) {
-				campoInteiroAnt.innerText = Math.trunc(
-					panhadores[numPanhador - 1].preco,
-				);
-				campoDecimalAnt.innerText =
-					panhadores[numPanhador - 1].preco % 1;
-			} else {
-				campoInteiroAnt.innerText = '-';
-				campoDecimalAnt.innerText = '-';
-			}
-			nomes.style.display = 'none';
-			calculadora.style.display = 'flex';
-			passo = 3;
-			window.history.pushState({ passo: passo }, '', '#' + 'cafe');
-			break;
-		/*case 3:
-			confirmar.style.display = 'none';
-			calculadora.style.display = 'flex';
-			etapa.innerText = 'Litros';
-			//anterior.innerText = `${panhadores[numPanhador].latoes}`;
-			passo = 4;
-			window.history.pushState({ passo: passo }, '', '#' + 'litros');
-			break;*/
-		case 3:
-			calculadora.style.display = 'none';
-			confirmar.style.display = 'flex';
-			passo = 4;
-			window.history.pushState({ passo: passo }, '', '#' + 'confirmar');
-			break;
-	}
+function mostrarPasso() {
+	debug.innerText = '';
+	debug.append(`P: ${passo}\n`);
 }
 
 function calcularResultados() {
@@ -421,34 +371,46 @@ window.addEventListener('load', () => {
 	window.history.replaceState({ passo: 1 }, '', '#nomes');
 });
 
+function limparCampos() {
+	campos.forEach((campo) => {
+		campo.innerText = '';
+	});
+}
+
 function exibirPagina(passo) {
+	numCount = 0;
+
 	paginas.forEach((pagina) => {
 		pagina.style.display = 'none';
 	});
+
+	mostrarPasso();
+
+	limparCampos();
+
 	switch (passo) {
 		case 1:
 			nomes.style.display = 'flex';
+			window.history.pushState({ passo: passo }, '', '#' + 'nomes');
 			break;
 		case 2:
-			//campoInteiro.placeholder = 'preco por Latão R$/Latão';
-			//anterior.innerText = panhadores[numPanhador].nome;
+			etapa.innerText = 'Preco por Latão (R$/Latão)';
 			calculadora.style.display = 'flex';
+			window.history.pushState({ passo: passo }, '', '#' + 'preco');
 			break;
 		case 3:
-			//campoInteiro.placeholder = 'Latões';
-			//anterior.innerText = `${panhadores[numPanhador].preco} R$/latão`;
+			mudarPreco.style.display = 'flex';
+			etapa.innerText = 'Latões e Litros';
 			calculadora.style.display = 'flex';
+			window.history.pushState({ passo: passo }, '', '#' + 'cafe');
 			break;
 		case 4:
-			//campoInteiro.placeholder = 'Litros';
-			//anterior.innerText = `${panhadores[numPanhador].latoes} latões`;
-			calculadora.style.display = 'flex';
+			confirmar.style.display = 'flex';
+			window.history.pushState({ passo: passo }, '', '#' + 'confirmar');
 			break;
 		case 5:
-			confirmar.style.display = 'flex';
-			break;
-		case 6:
 			resultados.style.display = 'flex';
+			window.history.pushState({ passo: passo }, '', '#' + 'resultados');
 			break;
 	}
 }
