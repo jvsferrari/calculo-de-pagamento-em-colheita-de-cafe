@@ -105,6 +105,9 @@ mais.addEventListener('click', (event) => {
 });
 
 function somar() {
+	if (campoLatoes.innerText == '' && campoLitros.innerText == '') {
+		return;
+	}
 	camposAnteriores.style.display = 'flex';
 	panhadores[numPanhador].latoes.push(parseInt(campoLatoes.innerText) || 0);
 	panhadores[numPanhador].litros.push(parseInt(campoLitros.innerText) || 0);
