@@ -29,14 +29,23 @@ const campoLatoesAnt = document.querySelector('#campoLatoesAnt');
 const campoLitrosAnt = document.querySelector('#campoLitrosAnt');
 const campos = document.querySelectorAll('.campo');
 const voltarCalc = document.querySelector('#voltarCalc');
-
-const debug = document.querySelector('#debug');
+const individual = document.querySelector('#individual');
+const tabelaIndividual = document.querySelector('#tabelaIndividual');
+const precoAtual = document.querySelector('#precoAtual');
+const nomeIndividual = document.querySelector('#nomeIndividual');
+const compartilharIndividual = document.querySelector(
+	'#compartilharIndividual',
+);
+const baixarIndividual = document.querySelector('#baixarIndividual');
+const tabelaIndividualToda = document.querySelector('#tabelaIndividualToda');
+const theadIndividual = document.querySelector('#theadIndividual');
 
 let numPanhador = 0;
 let passo = 1;
 let panhadores = [];
 let numCount = 0;
-// preco novo??????????????????????????????? checkbox
+let precoDefinido = false;
+
 function novoPanhador() {
 	let nome = campoNome.innerText;
 	if (nome == null || nome == undefined || nome.trim() == '') {
@@ -54,9 +63,9 @@ function novoPanhador() {
 	};
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-	mostrarPasso();
-});
+// document.addEventListener('DOMContentLoaded', function () {
+// 	mostrarPasso();
+// });
 
 nomePronto.addEventListener('click', (event) => {
 	event.preventDefault();
@@ -110,6 +119,18 @@ finalizar.addEventListener('click', (event) => {
 	event.preventDefault();
 	calcularResultados();
 	mostrarResultados();
+	linhasPanhadores = document.querySelectorAll('.linhaPanhador');
+	linhasPanhadores.forEach((linha) => {
+		linha.addEventListener('click', () => {
+			calcularIndividual(parseInt(linha.id));
+			nomeIndividual.innerText = panhadores[linha.id].nome;
+			passo++;
+			exibirPagina(passo, true);
+		});
+		passo++;
+		exibirPagina(passo);
+	});
+
 	passo = 5;
 	exibirPagina(passo, true);
 });
@@ -126,6 +147,7 @@ mudarPreco.addEventListener('click', (event) => {
 	if (!panhadores[numPanhador]) {
 		panhadores[numPanhador] = novoPanhador();
 	}
+	precoDefinido = false;
 	passo++;
 	exibirPagina(passo, true);
 });
@@ -135,6 +157,14 @@ voltar.forEach((botao) => {
 		event.preventDefault();
 		window.history.back();
 	});
+});
+
+campoLatoes.addEventListener('click', () => {
+	if (numCount >= 2) numCount = campoLatoes.innerText.length;
+});
+
+campoLitros.addEventListener('click', () => {
+	if (numCount < 2) numCount = campoLitros.innerText.length + 2;
 });
 
 function salvarNome() {
@@ -151,6 +181,7 @@ function salvarPreco() {
 	let reais = parseFloat(campoLatoes.innerText) || 0;
 	let centavos = parseFloat(campoLitros.innerText) || 0;
 	panhadores[numPanhador].preco = reais + centavos / 100;
+	precoDefinido = true;
 }
 
 numeroPronto.addEventListener('click', (event) => {
@@ -161,7 +192,9 @@ numeroPronto.addEventListener('click', (event) => {
 			passo++;
 			break;
 		case 3: //3 -> 4
-			somar();
+			if (campoLatoes.innerText != '' || campoLitros.innerText != '') {
+				somar();
+			}
 			passo++;
 			break;
 	}
@@ -177,6 +210,14 @@ numeros.forEach((tecla) => {
 
 compartilhar.addEventListener('click', () => {
 	compartilharPdf('compartilhar');
+});
+
+compartilharIndividual.addEventListener('click', () => {
+	compartilharPdf('compartilharIndividual');
+});
+
+baixarIndividual.addEventListener('click', () => {
+	compartilharPdf('baixarIndividual');
 });
 
 baixar.addEventListener('click', () => {
@@ -196,6 +237,8 @@ zerar.addEventListener('click', (event) => {
 	event.preventDefault();
 	numPanhador = 0;
 	panhadores = [];
+	mudarPreco.style.display = 'none';
+	precoDefinido = false;
 	tabela.replaceChildren();
 	passo = 1;
 	exibirPagina(1, true);
@@ -203,8 +246,19 @@ zerar.addEventListener('click', (event) => {
 
 voltarCalc.addEventListener('click', (event) => {
 	event.preventDefault();
-	panhadores;
-	//todo
+	if (panhadores[numPanhador].latoes.length == 0) {
+		passo--;
+		exibirPagina(passo, true);
+	} else {
+		campoLatoes.innerText = panhadores[numPanhador].latoes.at(-1);
+		campoLitros.innerText = panhadores[numPanhador].litros.at(-1);
+		panhadores[numPanhador].latoes.pop();
+		panhadores[numPanhador].litros.pop();
+		campoLatoesAnt.innerText =
+			panhadores[numPanhador].latoes.at(-1) ?? '00';
+		campoLitrosAnt.innerText =
+			panhadores[numPanhador].litros.at(-1) ?? '00';
+	}
 });
 
 function teclar(numero) {
@@ -213,17 +267,16 @@ function teclar(numero) {
 		numCount++;
 	} else {
 		if (numCount < 4) {
-			campoLitros.focus();
 			campoLitros.innerText += numero.innerText;
 			numCount++;
 		} else return;
 	}
 }
 
-function mostrarPasso() {
-	debug.innerText = '';
-	debug.append(`P: ${passo}\n`);
-}
+// function mostrarPasso() {
+// 	debug.innerText = '';
+// 	debug.append(`P: ${passo}\n`);
+// }
 
 function calcularResultados() {
 	panhadores.forEach((panhador) => {
@@ -250,6 +303,8 @@ function mostrarResultados() {
 	tabela.replaceChildren();
 	for (let i = 0; i < panhadores.length; i++) {
 		let linha = document.createElement('tr');
+		linha.classList.add('linhaPanhador');
+		linha.id = i;
 		let nome = document.createElement('td');
 		nome.innerText = panhadores[i].nome;
 		linha.appendChild(nome);
@@ -297,7 +352,32 @@ async function compartilharPdf(chamador) {
 	tabelaToda.classList.remove('escondido');
 	const { jsPDF } = window.jspdf;
 	const doc = new jsPDF();
-	doc.autoTable({ html: '#tabelaToda' });
+
+	// 1. Gera a data formatada no padrão Dia-Mês-Ano (Ex: 22-09-2026)
+	const hoje = new Date();
+	const dataFormatada = hoje.toLocaleDateString('pt-BR').replaceAll('/', '-');
+
+	// 2. Variável que vai guardar o nome final do arquivo
+	let nomeArquivo = '';
+
+	// 3. Define o nome e desenha a tabela de acordo com o chamador
+	if (chamador == 'compartilhar' || chamador == 'baixar') {
+		doc.autoTable({ html: '#tabelaToda' });
+		nomeArquivo = `relatorio ${dataFormatada}.pdf`;
+	}
+
+	if (
+		chamador == 'compartilharIndividual' ||
+		chamador == 'baixarIndividual'
+	) {
+		doc.autoTable({ html: '#tabelaIndividualToda' });
+
+		// Pega o nome, remove espaços extras e limpa caracteres especiais proibidos, mantendo letras, números, espaços, hífens e acentos
+		const nomePessoa = nomeIndividual.innerText
+			.trim()
+			.replace(/[^a-zA-Z0-9À-ÿ -]/g, '');
+		nomeArquivo = `${nomePessoa} ${dataFormatada}.pdf`;
+	}
 
 	// Verifica se está rodando dentro do aplicativo Android (Capacitor)
 	const isApp = window.Capacitor && window.Capacitor.isNativePlatform();
@@ -311,25 +391,28 @@ async function compartilharPdf(chamador) {
 			// O Capacitor não entende "Blob", então transformamos o PDF em Base64
 			const base64Data = doc.output('datauristring').split(',')[1];
 
-			if (chamador === 'compartilhar') {
+			if (
+				chamador === 'compartilhar' ||
+				chamador === 'compartilharIndividual'
+			) {
 				// Salva temporariamente no CACHE para poder enviar pelo WhatsApp
 				const resultado = await Filesystem.writeFile({
-					path: 'relatorio_pagamento.pdf',
+					path: nomeArquivo,
 					data: base64Data,
-					directory: 'CACHE', // Usando string literal pois Directory enum pode não estar disponível globalmente
+					directory: 'CACHE',
 				});
 
 				// Abre a tela de compartilhamento nativa do Android
 				await Share.share({
 					title: 'Relatório de Pagamento',
 					text: 'Segue em anexo a tabela do café.',
-					files: [resultado.uri], // Share plugin usa 'files' para URIs no Android
+					files: [resultado.uri],
 				});
 			} else {
 				// Botão "Baixar": Tenta salvar direto na pasta DOCUMENTOS
 				try {
 					await Filesystem.writeFile({
-						path: 'Pagamento_Cafe_' + Date.now() + '.pdf',
+						path: nomeArquivo,
 						data: base64Data,
 						directory: 'DOCUMENTS',
 					});
@@ -343,7 +426,7 @@ async function compartilharPdf(chamador) {
 
 					// Fallback: Salva no CACHE e abre menu de compartilhar para o usuário escolher "Salvar no dispositivo"
 					const resultado = await Filesystem.writeFile({
-						path: 'relatorio_pagamento.pdf',
+						path: nomeArquivo,
 						data: base64Data,
 						directory: 'CACHE',
 					});
@@ -362,14 +445,14 @@ async function compartilharPdf(chamador) {
 	} else {
 		// --- LÓGICA ORIGINAL DO NAVEGADOR / GITHUB PAGES ---
 		const pdfBlob = doc.output('blob');
-		const arquivo = new File([pdfBlob], 'relatorio.pdf', {
+		const arquivo = new File([pdfBlob], nomeArquivo, {
 			type: 'application/pdf',
 		});
 
 		if (
 			navigator.canShare &&
 			navigator.canShare({ files: [arquivo] }) &&
-			chamador == 'compartilhar'
+			(chamador == 'compartilhar' || chamador == 'compartilharIndividual')
 		) {
 			try {
 				await navigator.share({
@@ -381,9 +464,10 @@ async function compartilharPdf(chamador) {
 				console.log('O usuário cancelou o compartilhamento.', erro);
 			}
 		} else {
-			doc.save('relatorio.pdf');
+			doc.save(nomeArquivo);
 		}
 	}
+
 	tabelaToda.classList.add('escondido');
 }
 
@@ -414,18 +498,24 @@ function exibirPagina(passo, push) {
 		pagina.style.display = 'none';
 	});
 
-	mostrarPasso();
+	//mostrarPasso();
 
 	limparCampos();
 
 	switch (passo) {
 		case 1:
+			camposAnteriores.style.display = 'none';
 			nomes.style.display = 'flex';
 			if (push) {
 				window.history.pushState({ passo: passo }, '', '#' + 'nomes');
 			}
 			break;
 		case 2:
+			if (precoDefinido) {
+				passo++;
+				exibirPagina(passo, true);
+			}
+			camposAnteriores.style.display = 'none';
 			etapa.innerText = 'Preco por Latão (R$/Latão)';
 			calculadora.style.display = 'flex';
 			if (push) {
@@ -433,7 +523,12 @@ function exibirPagina(passo, push) {
 			}
 			break;
 		case 3:
+			camposAnteriores.style.display = 'flex';
 			mudarPreco.style.display = 'flex';
+			campoLatoesAnt.innerText =
+				panhadores[numPanhador].latoes.at(-1) ?? '-';
+			campoLitrosAnt.innerText =
+				panhadores[numPanhador].litros.at(-1) ?? '-';
 			etapa.innerText = 'Latões e Litros';
 			calculadora.style.display = 'flex';
 			if (push) {
@@ -460,7 +555,58 @@ function exibirPagina(passo, push) {
 				);
 			}
 			break;
+		case 6:
+			individual.style.display = 'flex';
+			if (push) {
+				window.history.pushState(
+					{ passo: passo },
+					'',
+					'#' + 'individual',
+				);
+			}
+			break;
 	}
+}
+
+function calcularIndividual(numero) {
+	tabelaIndividual.innerHTML = '';
+	for (let i = 0; i < panhadores[numero].latoes.length; i++) {
+		const linha = document.createElement('tr');
+		const latoes = document.createElement('td');
+		const litros = document.createElement('td');
+		const valor = document.createElement('td');
+
+		latoes.innerText = panhadores[numero].latoes[i];
+		litros.innerText = panhadores[numero].litros[i];
+		valor.innerText = (
+			(panhadores[numero].latoes[i] + panhadores[numero].litros[i] / 60) *
+			panhadores[numero].preco
+		).toFixed(2);
+
+		linha.appendChild(latoes);
+		linha.appendChild(litros);
+		linha.appendChild(valor);
+		tabelaIndividual.appendChild(linha);
+	}
+	const totais = document.createElement('tr');
+	const totalLatoes = document.createElement('td');
+	const totalLitros = document.createElement('td');
+	const totalValores = document.createElement('td');
+
+	totalLatoes.innerText = panhadores[numero].totalLatoes;
+	totalLitros.innerText = panhadores[numero].totalLitros;
+	totalValores.innerText = panhadores[numero].total.toFixed(2);
+
+	totais.appendChild(totalLatoes);
+	totais.appendChild(totalLitros);
+	totais.appendChild(totalValores);
+	tabelaIndividual.appendChild(totais);
+
+	totais.id = 'totais';
+	totalValores.classList.add('direita');
+	totalValores.classList.add('embaixo');
+	totalLatoes.classList.add('esquerda');
+	totalLatoes.classList.add('embaixo');
 }
 
 window.onbeforeunload = () => {

@@ -12,7 +12,7 @@
 		<script src="script.js" defer></script>
 	</head>
 	<body>
-		<h3 id="debug"></h3>
+		<!-- <h3 id="debug"></h3> -->
 		<div class="pagina" id="nomes">
 			<h1>Calcular pagamento</h1>
 			<h2>
@@ -51,7 +51,6 @@
 					<div
 						id="campoLatoesAnt"
 						class="campo"
-						placeholder="R$"
 						contenteditable="false"></div>
 					<div
 						id="campoLitrosAnt"
@@ -63,7 +62,6 @@
 					<div
 						id="campoLatoes"
 						class="campo"
-						placeholder="R$"
 						contenteditable="true"
 						tabindex="0"></div>
 					<div
@@ -92,7 +90,10 @@
 						<button class="numero">3</button>
 					</div>
 					<div class="linha">
-						<button id="mais">+</button>
+						<button id="voltarCalc">
+							<i class="fa-solid fa-rotate-left"></i>
+						</button>
+
 						<button class="numero">0</button>
 						<button id="numeroPronto">
 							<i class="fa-solid fa-check"></i>
@@ -104,9 +105,7 @@
 					<button id="borracha">
 						<i class="fa-solid fa-eraser"></i>
 					</button>
-					<button id="voltarCalc">
-						<i class="fa-solid fa-rotate-left"></i>
-					</button>
+					<button id="mais"><i class="fa-solid fa-plus"></i></button>
 				</div>
 			</div>
 			<h2 id="nomeAtual"></h2>
@@ -171,6 +170,39 @@
 					<i class="fa-solid fa-check"></i>
 				</button>
 				<p>Finalizar</p>
+			</div>
+		</div>
+		<div class="pagina" id="individual">
+			<h2 id="nomeIndividual"></h2>
+			<table id="tabelaIndividualToda">
+				<thead id="theadIndividual">
+					<tr>
+						<th class="esquerda cima">Latões</th>
+						<th>Litros</th>
+						<th class="direita cima">Valor</th>
+					</tr>
+				</thead>
+				<tbody id="tabelaIndividual"></tbody>
+			</table>
+			<div class="botoes">
+				<div class="botaoComposto">
+					<button class="voltar">
+						<i class="fa-solid fa-rotate-left"></i>
+					</button>
+					<p>Voltar</p>
+				</div>
+				<div class="botaoComposto">
+					<button id="baixarIndividual">
+						<i class="fa-solid fa-download"></i>
+					</button>
+					<p>Baixar</p>
+				</div>
+				<div class="botaoComposto">
+					<button id="compartilharIndividual">
+						<i class="fa-solid fa-share"></i>
+					</button>
+					<p>Enviar</p>
+				</div>
 			</div>
 		</div>
 	</body>

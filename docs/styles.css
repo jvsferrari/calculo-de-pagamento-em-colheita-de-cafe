@@ -309,3 +309,29 @@ table.escondido .quantidadeCafe {
 	gap: 10px;
 	align-items: center;
 }
+
+#individual {
+	display: none;
+}
+
+#totais * {
+	background-color: #386641;
+	color: #f2e8cf;
+}
+
+#individual {
+	align-items: center;
+}
+
+.esquerda.cima {
+	border-top-left-radius: 30px;
+}
+.esquerda.embaixo {
+	border-bottom-left-radius: 30px;
+}
+.direita.cima {
+	border-top-right-radius: 30px;
+}
+.direita.embaixo {
+	border-bottom-right-radius: 30px;
+}
