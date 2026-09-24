@@ -25,8 +25,6 @@ const tabelaToda = document.querySelector('#tabelaToda');
 const mudarPreco = document.querySelector('#mudarPreco');
 const voltar = document.querySelectorAll('.voltar');
 const etapa = document.querySelector('#etapa');
-const campoLatoesAnt = document.querySelector('#campoLatoesAnt');
-const campoLitrosAnt = document.querySelector('#campoLitrosAnt');
 const campos = document.querySelectorAll('.campo');
 const voltarCalc = document.querySelector('#voltarCalc');
 const individual = document.querySelector('#individual');
@@ -71,7 +69,9 @@ nomePronto.addEventListener('click', (event) => {
 	event.preventDefault();
 	salvarNome();
 	passo++;
+
 	exibirPagina(passo, true);
+	focar(campoLatoes);
 });
 
 pular.addEventListener('click', (event) => {
@@ -94,6 +94,8 @@ borracha.addEventListener('click', (event) => {
 		campoLitros.innerText = campoLitros.innerText.slice(0, -1);
 	}
 	numCount--;
+	if (numCount <= 2) numCount = campoLatoes.innerText.length;
+	focar();
 });
 
 mais.addEventListener('click', (event) => {
@@ -102,6 +104,7 @@ mais.addEventListener('click', (event) => {
 		return;
 	}
 	somar();
+	focar(campoLatoes);
 });
 
 function somar() {
@@ -111,8 +114,18 @@ function somar() {
 	camposAnteriores.style.display = 'flex';
 	panhadores[numPanhador].latoes.push(parseInt(campoLatoes.innerText) || 0);
 	panhadores[numPanhador].litros.push(parseInt(campoLitros.innerText) || 0);
-	campoLatoesAnt.innerText = campoLatoes.innerText || '00';
-	campoLitrosAnt.innerText = campoLitros.innerText || '00';
+
+	const novoValor = document.createElement('div');
+	const novoLatao = document.createElement('div');
+	const novoLitro = document.createElement('div');
+	novoLatao.innerText = campoLatoes.innerText || '0';
+	novoLitro.innerText = campoLitros.innerText || '0';
+
+	novoValor.append(novoLatao);
+	novoValor.append(novoLitro);
+	camposAnteriores.append(novoValor);
+	// campoLatoesAnt.innerText = campoLatoes.innerText || '00';
+	// campoLitrosAnt.innerText = campoLitros.innerText || '00';
 	campoLatoes.innerText = '';
 	campoLitros.innerText = '';
 	numCount = 0;
@@ -136,6 +149,8 @@ finalizar.addEventListener('click', (event) => {
 
 	passo = 5;
 	exibirPagina(passo, true);
+
+	camposAnteriores.innerHTML = '';
 });
 
 adicionar.addEventListener('click', (event) => {
@@ -143,6 +158,7 @@ adicionar.addEventListener('click', (event) => {
 	numPanhador++;
 	passo = 1;
 	exibirPagina(passo, true);
+	camposAnteriores.innerHTML = '';
 });
 
 mudarPreco.addEventListener('click', (event) => {
@@ -163,10 +179,12 @@ voltar.forEach((botao) => {
 });
 
 campoLatoes.addEventListener('click', () => {
+	focar(campoLatoes);
 	if (numCount >= 2) numCount = campoLatoes.innerText.length;
 });
 
 campoLitros.addEventListener('click', () => {
+	focar(campoLitros);
 	if (numCount < 2) numCount = campoLitros.innerText.length + 2;
 });
 
@@ -193,11 +211,10 @@ numeroPronto.addEventListener('click', (event) => {
 		case 2: ///2 -> 3
 			salvarPreco();
 			passo++;
+			focar(campoLatoes);
 			break;
 		case 3: //3 -> 4
-			if (campoLatoes.innerText != '' || campoLitros.innerText != '') {
-				somar();
-			}
+			somar();
 			passo++;
 			break;
 	}
@@ -257,10 +274,12 @@ voltarCalc.addEventListener('click', (event) => {
 		campoLitros.innerText = panhadores[numPanhador].litros.at(-1);
 		panhadores[numPanhador].latoes.pop();
 		panhadores[numPanhador].litros.pop();
-		campoLatoesAnt.innerText =
-			panhadores[numPanhador].latoes.at(-1) ?? '00';
-		campoLitrosAnt.innerText =
-			panhadores[numPanhador].litros.at(-1) ?? '00';
+
+		camposAnteriores.lastElementChild.remove();
+		// campoLatoesAnt.innerText =
+		// 	panhadores[numPanhador].latoes.at(-1) ?? '00';
+		// campoLitrosAnt.innerText =
+		// 	panhadores[numPanhador].litros.at(-1) ?? '00';
 	}
 });
 
@@ -274,6 +293,7 @@ function teclar(numero) {
 			numCount++;
 		} else return;
 	}
+	focar();
 }
 
 // function mostrarPasso() {
@@ -494,6 +514,19 @@ function limparCampos() {
 	});
 }
 
+function focar(clicado) {
+	campos.forEach((campo) => {
+		campo.style.borderWidth = '0';
+	});
+	if (clicado) {
+		clicado.style.borderWidth = '3px';
+	} else {
+		if (numCount > 2) {
+			campoLitros.style.borderWidth = '3px';
+		} else campoLatoes.style.borderWidth = '3px';
+	}
+}
+
 function exibirPagina(passo, push) {
 	numCount = 0;
 
@@ -528,10 +561,6 @@ function exibirPagina(passo, push) {
 		case 3:
 			camposAnteriores.style.display = 'flex';
 			mudarPreco.style.display = 'flex';
-			campoLatoesAnt.innerText =
-				panhadores[numPanhador].latoes.at(-1) ?? '-';
-			campoLitrosAnt.innerText =
-				panhadores[numPanhador].litros.at(-1) ?? '-';
 			etapa.innerText = 'Latões e Litros';
 			calculadora.style.display = 'flex';
 			if (push) {
